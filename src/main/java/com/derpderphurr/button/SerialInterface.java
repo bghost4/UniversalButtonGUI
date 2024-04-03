@@ -3,6 +3,9 @@ package com.derpderphurr.button;
 import com.derpderphurr.button.action.Action;
 import com.fazecast.jSerialComm.SerialPort;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.util.HexFormat;
 import java.util.List;
 
 public class SerialInterface {
@@ -20,21 +23,54 @@ public class SerialInterface {
         return true;
     }
 
+    public void putPressBuffer(byte[] stuff) {
+        ByteBuffer buf = ByteBuffer.allocate(stuff.length+3);
+        buf.put("PP".getBytes());
+        buf.put((byte)stuff.length);
+        buf.put(stuff);
+        System.out.println("Sending Bytes: ");
+        System.out.println(HexFormat.of().formatHex(buf.array()));
+        int bytes = serialPort.writeBytes(buf.array(),buf.array().length);
+        System.out.printf("Send %d Bytes\n",bytes);
+        //read 4 bytes
+        byte[] report_bytes = new byte[1];
+        int count = serialPort.readBytes(report_bytes,1);
+        System.out.printf("Report: %s\n",HexFormat.of().formatHex(report_bytes));
+    }
     public byte[] getPressAction() {
 
-        serialPort.writeBytes("GP".getBytes(),2);
+        int total_bytes = 0;
+
+        byte[] buffer = new byte[64];
+
+        while(total_bytes < 16) {
+            serialPort.writeBytes("GP".getBytes(), 2);
+
+            int bytes = serialPort.readBytes(buffer, 64);
+            total_bytes += bytes;
+            System.out.printf("Got %d bytes\n", bytes);
+        }
+        return buffer;
+    }
+
+    public int available() {
+        return serialPort.bytesAvailable();
+    }
+
+    public byte[] getClockWiseAction() {
+        serialPort.writeBytes("GC".getBytes(),2);
         byte[] buffer = new byte[64];
         int bytes = serialPort.readBytes(buffer,64);
         System.out.printf("Got %d bytes\n",bytes);
         return buffer;
     }
 
-    public List<Action> getClockWiseAction() {
-        return null;
-    }
-
-    public List<Action> getAntiClockWiseAction() {
-        return null;
+    public byte[] getAntiClockWiseAction() {
+        serialPort.writeBytes("GA".getBytes(),2);
+        byte[] buffer = new byte[64];
+        int bytes = serialPort.readBytes(buffer,64);
+        System.out.printf("Got %d bytes\n",bytes);
+        return buffer;
     }
 
 }
