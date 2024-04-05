@@ -1,4 +1,5 @@
 package com.derpderphurr.button.action.keyboard;
 
-public class KeySequenceElement {
+public abstract class KeySequenceElement {
+    abstract byte[] toBytes();
 }

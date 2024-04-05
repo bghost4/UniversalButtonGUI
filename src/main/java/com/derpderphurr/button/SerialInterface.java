@@ -1,18 +1,15 @@
 package com.derpderphurr.button;
 
-import com.derpderphurr.button.action.Action;
 import com.fazecast.jSerialComm.SerialPort;
 
 import java.nio.ByteBuffer;
 import java.util.HexFormat;
-import java.util.List;
 
 public class SerialInterface {
     private SerialPort serialPort;
 
-    public void setPress(List<Action> actions){ }
-    public void setClockWise(List<Action> actions) {}
-    public void setAntiClockWise(List<Action> actions) {}
+    public enum BufferLocation { CLOCKWISE,ANTICLOCKWISE,PRESS };
+
     public boolean isConnected(){ return false;}
     public boolean connect(SerialPort p) {
         this.serialPort = p;
@@ -26,6 +23,7 @@ public class SerialInterface {
         return true;
     }
 
+    //For some reason, this one corrupts the input, and I haven't figured out why, makes me pisstified
     public void putPressBufferOneGo(byte[] stuff) {
         ByteBuffer buf = ByteBuffer.allocate(3+ stuff.length);
         byte[] report_bytes = new byte[1];
@@ -39,15 +37,6 @@ public class SerialInterface {
         System.out.println(HexFormat.of().formatHex(buf.array()));
         int bytes = serialPort.writeBytes(buf.array(),buf.array().length);
         System.out.printf("Send %d Bytes\n",bytes);
-        //read 1 bytes
-
-//        bytes = 0;
-//        while(bytes < 1) {
-//            bytes = serialPort.readBytes(report_bytes, 1);
-//        }
-
-//        int rlength = report_bytes[0] & 0xFF;
-//        System.out.printf("Total Bytes Report: %s - %d\n",HexFormat.of().formatHex(report_bytes),rlength);
 
         bytes = 0;
         while(bytes < 1) {
@@ -64,61 +53,63 @@ public class SerialInterface {
         System.out.printf("Bytes Total Report: %s - %d\n",HexFormat.of().formatHex(report_bytes),btot);
     }
 
-    public void putPressBuffer(byte[] stuff) {
+
+
+    public void putBuffer(BufferLocation loc,byte[] stuff) {
         ByteBuffer buf = ByteBuffer.allocate(3);
-        byte[] buffer = new byte[64];
-        //ByteBuffer buf = ByteBuffer.allocate(3+ stuff.length);
-        buf.put("PP".getBytes());
+
+        switch(loc) {
+            case PRESS -> buf.put("PP".getBytes());
+            case CLOCKWISE -> buf.put("PC".getBytes());
+            case ANTICLOCKWISE -> buf.put("PA".getBytes());
+        }
+
         buf.put((byte)stuff.length);
-        //buf.put(stuff);
-        System.out.println("Sending Bytes: ");
+
+        //System.out.println("Sending Bytes: ");
         System.out.println(HexFormat.of().formatHex(buf.array()));
         int bytes = serialPort.writeBytes(buf.array(),buf.array().length);
-        System.out.printf("Send %d Bytes\n",bytes);
-        //read 1 bytes
-        byte[] report_bytes = new byte[1];
-        bytes = 0;
-        while(bytes < 1) {
-            bytes = serialPort.readBytes(report_bytes, 1);
-        }
-        System.out.printf("Report: %s - %d\n",HexFormat.of().formatHex(report_bytes),bytes);
-        int rlength = report_bytes[0] & 0xFF;
-        System.out.printf("Expecting %d Bytes Back\n",rlength);
-        bytes = 0;
-        while(bytes < rlength) {
-            bytes += serialPort.readBytes(buffer,(rlength-bytes));
-        }
-        System.out.println("Echo RECV Buffer: ");
-        System.out.println(HexFormat.of().formatHex(buffer,0,bytes));
-        //bytes = serialPort.writeBytes(stuff,stuff.length);
         //System.out.printf("Send %d Bytes\n",bytes);
+
+        bytes = serialPort.writeBytes(stuff,stuff.length);
+        //System.out.printf("Send %d Bytes\n",bytes);
+
+        byte[] report_bytes = new byte[1];
+
         bytes = 0;
         while(bytes < 1) {
             bytes = serialPort.readBytes(report_bytes, 1);
         }
-        System.out.printf("Report: %s - %d\n",HexFormat.of().formatHex(report_bytes),bytes);
+        //System.out.printf("Report: %s - %d\n",HexFormat.of().formatHex(report_bytes),bytes);
         bytes = 0;
         while(bytes < 1) {
             bytes = serialPort.readBytes(report_bytes, 1);
         }
-        System.out.printf("Report: %s - %d\n",HexFormat.of().formatHex(report_bytes),bytes);
+        //System.out.printf("Report: %s - %d\n",HexFormat.of().formatHex(report_bytes),bytes);
     }
 
     public int readData(int size,byte[] buf) {
         return serialPort.readBytes(buf,size);
     }
 
-    public byte[] getPressAction() {
+    public byte[] getAction(BufferLocation loc) {
 
         int total_bytes = 0;
 
         byte[] buffer = new byte[64];
 
-        serialPort.writeBytes("GP".getBytes(), 2);
+        String cmd  = switch(loc) {
+            case PRESS -> "GP";
+            case CLOCKWISE -> "GC";
+            case ANTICLOCKWISE -> "GA";
+        };
 
+        serialPort.writeBytes(cmd.getBytes(), 2);
+
+        //Maybe I should have it send the size back before the buffer this has to timeout
         int bytes = serialPort.readBytes(buffer, 64);
         total_bytes += bytes;
-        System.out.printf("Got %d bytes\n", bytes);
+        //System.out.printf("Got %d bytes\n", bytes);
 
         return buffer;
     }

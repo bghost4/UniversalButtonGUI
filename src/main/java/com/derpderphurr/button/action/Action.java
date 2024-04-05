@@ -1,4 +1,10 @@
 package com.derpderphurr.button.action;
 
-public class Action {
+import com.derpderphurr.button.ui.ActionEditor;
+
+public abstract class Action {
+    public abstract byte[] toBytes();
+
+    public abstract ActionEditor<?> createEditor();
+
 }
