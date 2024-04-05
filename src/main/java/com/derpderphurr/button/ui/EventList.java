@@ -2,6 +2,7 @@ package com.derpderphurr.button.ui;
 
 import com.derpderphurr.button.SerialInterface;
 import com.derpderphurr.button.action.Action;
+import com.derpderphurr.button.action.KeyboardSequence;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
@@ -26,6 +27,11 @@ public class EventList extends VBox {
         HBox hb = new HBox();
         hb.getChildren().addAll(btnMoveUp,btnAddKeyboard,btnAddConsumer,btnAddMouse,btnRemove,btnMoveDown);
         getChildren().add(hb);
+
+        btnAddKeyboard.setOnAction(eh -> actions.getItems().add(new KeyboardEditor()));
+        btnAddConsumer.setOnAction( eh -> actions.getItems().add(new ConsumerEditor()));
+        btnAddMouse.setOnAction( eh -> actions.getItems().add(new MouseEditor()));
+
     }
 
     public void clear() {

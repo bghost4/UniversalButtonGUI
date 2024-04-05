@@ -1,6 +1,6 @@
 package com.derpderphurr.button.action.keyboard;
 
-public class KeySequence extends KeySequenceElement {
+public class KeyPress extends KeySequenceElement {
     @Override
     byte[] toBytes() {
         return new byte[0];

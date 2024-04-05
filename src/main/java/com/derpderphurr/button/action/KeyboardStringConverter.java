@@ -4,6 +4,10 @@ public class KeyboardStringConverter {
     public record HIDcode(int c, boolean shiftRequired, int hid_code) { }
     public record SpecialKey(String name,boolean shift,int hidCode) { }
 
+    /* For More clarification see hid.h from TinyUSB Project */
+    //I Suspect these are all associated with US Keyboard Layout
+
+
     //Keys Not printable
     public static final SpecialKey[] specialKeys  = {
         new SpecialKey("Backspace",false,0x2a), //Backspace
@@ -28,17 +32,17 @@ public class KeyboardStringConverter {
         new SpecialKey("SysReq",false,0x9A),
         new SpecialKey("ScrLK",false,0x47),
         new SpecialKey("Pause",false,0x48),
-        new SpecialKey("Break",true,0x48),
+        //new SpecialKey("Break",true,0x48), Not sure if this is actually Implemented In HID Keycodes, as SysReq is it's own key
         new SpecialKey("Ins",false,0x49),
         new SpecialKey("Home",false,0x4A),
         new SpecialKey("PgUp",false,0x4B),
         new SpecialKey("Delete",false,0x4C),
         new SpecialKey("End",false,0x4D),
         new SpecialKey("PgDn",false,0x4E),
-        new SpecialKey("AR",false,0x4F),
-        new SpecialKey("AL",false,0x50),
-        new SpecialKey("AD",false,0x51),
-        new SpecialKey("AU",false,0x52)
+        new SpecialKey("AR",false,0x4F), //Arrow Right
+        new SpecialKey("AL",false,0x50), //Arrow Left
+        new SpecialKey("AD",false,0x51), //Arrow Down
+        new SpecialKey("AU",false,0x52) //Arrow Up
     };
 
     public static final HIDcode[] HIDCodeBlock = {
