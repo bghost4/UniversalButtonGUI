@@ -4,15 +4,19 @@ import com.derpderphurr.button.action.KeyboardSequence;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.TextFlow;
 
 public class KeyboardEditor extends ActionEditor<KeyboardSequence> {
 
-    private final Label lblDisplay = new Label("[EMPTY]");
+    private final TextFlow tfDisplay = new TextFlow();
     private final Button btnEdit = new Button("edit");
 
     public KeyboardEditor() {
         HBox hbLayout = new HBox();
-        hbLayout.getChildren().addAll(lblDisplay,btnEdit);
+        btnEdit.setOnAction(eh ->
+            new KeyboardSubEditor().showAndWait().ifPresent(ks -> setValue(ks))
+        );
+        hbLayout.getChildren().addAll(tfDisplay,btnEdit);
         getChildren().add(hbLayout);
     }
 

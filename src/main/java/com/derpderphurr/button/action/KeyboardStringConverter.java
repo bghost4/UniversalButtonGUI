@@ -1,5 +1,10 @@
 package com.derpderphurr.button.action;
 
+import com.derpderphurr.button.action.keyboard.KeySequenceElement;
+
+import java.util.Collections;
+import java.util.List;
+
 public class KeyboardStringConverter {
     public record HIDcode(int c, boolean shiftRequired, int hid_code) { }
     public record SpecialKey(String name,boolean shift,int hidCode) { }
@@ -155,4 +160,13 @@ public class KeyboardStringConverter {
             new HIDcode('Y',true,0x1c),
             new HIDcode('Z',true,0x1d),
     };
+
+    public static List<KeySequenceElement> fromString(String s) {
+        return Collections.emptyList();
+    }
+
+    public static String fromKeySequence(List<KeySequenceElement> items) {
+        return "Not Yet Implemented";
+    }
+
 }
