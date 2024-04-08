@@ -38,7 +38,6 @@ public class Launcher extends Application {
             si.putBuffer(SerialInterface.BufferLocation.PRESS,raw);
         });
 
-
         VBox vb = new VBox();
         vb.getChildren().add(l);
         vb.getChildren().add(btn);
