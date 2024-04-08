@@ -30,10 +30,11 @@ public class Launcher extends Application {
         btn.setOnAction(eh -> {
             List<Action> a = l.getActions();
             List<Byte> stuff = a.stream().flatMap(s -> s.toBytes()).toList();
-            byte[] raw = new byte[stuff.size()];
+            byte[] raw = new byte[stuff.size()+1];
             for(int i=0; i < stuff.size(); i++) {
                 raw[i] = stuff.get(i);
             }
+            raw[stuff.size()] = (byte)0x00;
             si.putBuffer(SerialInterface.BufferLocation.PRESS,raw);
         });
 

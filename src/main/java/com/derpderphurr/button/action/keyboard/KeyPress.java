@@ -39,6 +39,8 @@ public class KeyPress extends KeySequenceElement {
             }
             fragment.add((byte)elements.get(i).hid_code());
         }
+        e.add((byte)0xA1);
+        e.add((byte)fragment.size());
         e.addAll(fragment);
 
         return e.stream();

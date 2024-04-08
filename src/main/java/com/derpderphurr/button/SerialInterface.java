@@ -71,6 +71,7 @@ public class SerialInterface {
         int bytes = serialPort.writeBytes(buf.array(),buf.array().length);
         //System.out.printf("Send %d Bytes\n",bytes);
 
+        System.out.println(HexFormat.of().formatHex(stuff));
         bytes = serialPort.writeBytes(stuff,stuff.length);
         //System.out.printf("Send %d Bytes\n",bytes);
 
