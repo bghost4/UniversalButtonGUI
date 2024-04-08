@@ -1,168 +1,208 @@
 package com.derpderphurr.button.action;
 
+import com.derpderphurr.button.action.keyboard.KeyPress;
 import com.derpderphurr.button.action.keyboard.KeySequenceElement;
+import com.derpderphurr.button.action.keyboard.Modifier;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class KeyboardStringConverter {
-    public record HIDcode(int c, boolean shiftRequired, int hid_code) { }
-    public record SpecialKey(String name,boolean shift,int hidCode) { }
+    public record HIDcode(int c, String descr ,boolean shiftRequired, int hid_code) { }
 
     /* For More clarification see hid.h from TinyUSB Project */
     //I Suspect these are all associated with US Keyboard Layout
 
 
     //Keys Not printable
-    public static final SpecialKey[] specialKeys  = {
-        new SpecialKey("Backspace",false,0x2a), //Backspace
-        new SpecialKey("TAB",false,0x2B), //TAB
-        new SpecialKey("LF",false,0x28), //Line Feed
-        new SpecialKey("CR",false,0x28), //Carrige Return
-        new SpecialKey("ESC",false,0x29), //Escape
-        new SpecialKey("CapsLock",false,0x39),
-        new SpecialKey("F1",false,0x3A),
-        new SpecialKey("F2",false,0x3B),
-        new SpecialKey("F3",false,0x3C),
-        new SpecialKey("F4",false,0x3D),
-        new SpecialKey("F5",false,0x3E),
-        new SpecialKey("F6",false,0x3F),
-        new SpecialKey("F7",false,0x40),
-        new SpecialKey("F8",false,0x41),
-        new SpecialKey("F9",false,0x42),
-        new SpecialKey("F10",false,0x43),
-        new SpecialKey("F11",false,0x44),
-        new SpecialKey("F12",false,0x45),
-        new SpecialKey("PrintScreen",false,0x46),
-        new SpecialKey("SysReq",false,0x9A),
-        new SpecialKey("ScrLK",false,0x47),
-        new SpecialKey("Pause",false,0x48),
+    public static final HIDcode[] specialKeys  = {
+        new HIDcode(0,"Backspace",false,0x2a), //Backspace
+        new HIDcode(0,"TAB",false,0x2B), //TAB
+        new HIDcode(0,"LF",false,0x28), //Line Feed
+        new HIDcode(0,"CR",false,0x28), //Carrige Return
+        new HIDcode(0,"ESC",false,0x29), //Escape
+        new HIDcode(0,"CapsLock",false,0x39),
+        new HIDcode(0,"F1",false,0x3A),
+        new HIDcode(0,"F2",false,0x3B),
+        new HIDcode(0,"F3",false,0x3C),
+        new HIDcode(0,"F4",false,0x3D),
+        new HIDcode(0,"F5",false,0x3E),
+        new HIDcode(0,"F6",false,0x3F),
+        new HIDcode(0,"F7",false,0x40),
+        new HIDcode(0,"F8",false,0x41),
+        new HIDcode(0,"F9",false,0x42),
+        new HIDcode(0,"F10",false,0x43),
+        new HIDcode(0,"F11",false,0x44),
+        new HIDcode(0,"F12",false,0x45),
+        new HIDcode(0,"PrintScreen",false,0x46),
+        new HIDcode(0,"SysReq",false,0x9A),
+        new HIDcode(0,"ScrLK",false,0x47),
+        new HIDcode(0,"Pause",false,0x48),
         //new SpecialKey("Break",true,0x48), Not sure if this is actually Implemented In HID Keycodes, as SysReq is it's own key
-        new SpecialKey("Ins",false,0x49),
-        new SpecialKey("Home",false,0x4A),
-        new SpecialKey("PgUp",false,0x4B),
-        new SpecialKey("Delete",false,0x4C),
-        new SpecialKey("End",false,0x4D),
-        new SpecialKey("PgDn",false,0x4E),
-        new SpecialKey("AR",false,0x4F), //Arrow Right
-        new SpecialKey("AL",false,0x50), //Arrow Left
-        new SpecialKey("AD",false,0x51), //Arrow Down
-        new SpecialKey("AU",false,0x52) //Arrow Up
+        new HIDcode(0,"Ins",false,0x49),
+        new HIDcode(0,"Home",false,0x4A),
+        new HIDcode(0,"PgUp",false,0x4B),
+        new HIDcode(0,"Delete",false,0x4C),
+        new HIDcode(0,"End",false,0x4D),
+        new HIDcode(0,"PgDn",false,0x4E),
+        new HIDcode(0,"AR",false,0x4F), //Arrow Right
+        new HIDcode(0,"AL",false,0x50), //Arrow Left
+        new HIDcode(0,"AD",false,0x51), //Arrow Down
+        new HIDcode(0,"AU",false,0x52) //Arrow Up
     };
 
     public static final HIDcode[] HIDCodeBlock = {
             //Punctuation & Num Keys
-            new HIDcode(' ',false,0x2C), //Space
-            new HIDcode('`',false,0x35),
-            new HIDcode('~',true,0x35),
-            new HIDcode('!',true,0x1E),
-            new HIDcode('@',true,0x1F),
-            new HIDcode('#',true,0x20),
-            new HIDcode('$',true,0x21),
-            new HIDcode('%',true,0x22),
-            new HIDcode('^',true,0x23),
-            new HIDcode('&',true,0x24),
-            new HIDcode('*',true,0x25),
-            new HIDcode('(',true,0x26),
-            new HIDcode(')',true,0x27),
-            new HIDcode('-',false,0x2D),
-            new HIDcode('_',true,0x2D),
+            new HIDcode(' '," ",false,0x2C), //Space
+            new HIDcode('`',"`",false,0x35),
+            new HIDcode('~',"~",true,0x35),
+            new HIDcode('!',"!",true,0x1E),
+            new HIDcode('@',"@",true,0x1F),
+            new HIDcode('#',"#",true,0x20),
+            new HIDcode('$',"$",true,0x21),
+            new HIDcode('%',"%",true,0x22),
+            new HIDcode('^',"^",true,0x23),
+            new HIDcode('&',"&",true,0x24),
+            new HIDcode('*',"*",true,0x25),
+            new HIDcode('(',"(",true,0x26),
+            new HIDcode(')',")",true,0x27),
+            new HIDcode('-',"-",false,0x2D),
+            new HIDcode('_',"_",true,0x2D),
 
-            new HIDcode('=',false,0x2E),
-            new HIDcode('+',true,0x2E),
+            new HIDcode('=',"=",false,0x2E),
+            new HIDcode('+',"+",true,0x2E),
 
-            new HIDcode('[',false,0x2F),
-            new HIDcode('{',true,0x2F),
+            new HIDcode('[',"[",false,0x2F),
+            new HIDcode('{',"{",true,0x2F),
 
-            new HIDcode(']',false,0x30),
-            new HIDcode('}',true,0x30),
+            new HIDcode(']',"{",false,0x30),
+            new HIDcode('}',"}",true,0x30),
 
-            new HIDcode('\\',false,0x31),
-            new HIDcode('|',true,0x31),
+            new HIDcode('\\',"\\",false,0x31),
+            new HIDcode('|',"|",true,0x31),
 
-            new HIDcode(':',true,0x33),
-            new HIDcode(';',false,0x33),
+            new HIDcode(':',":",true,0x33),
+            new HIDcode(';',";",false,0x33),
 
-            new HIDcode('\'',false,0x34),
-            new HIDcode('\"',true,0x34),
+            new HIDcode('\'',"\'",false,0x34),
+            new HIDcode('\"',"\"",true,0x34),
 
-            new HIDcode(',',false,0x36),
-            new HIDcode('<',true,0x36),
+            new HIDcode(',',",",false,0x36),
+            new HIDcode('<',"<",true,0x36),
 
-            new HIDcode('.',false,0x37),
-            new HIDcode('>',true,0x37),
+            new HIDcode('.',".",false,0x37),
+            new HIDcode('>',">",true,0x37),
 
-            new HIDcode('/',false,0x38),
-            new HIDcode('?',true,0x38),
+            new HIDcode('/',"/",false,0x38),
+            new HIDcode('?',"?",true,0x38),
 
-            new HIDcode('0',false,0x27),
-            new HIDcode('1',false,0x1E),
-            new HIDcode('2',false,0x1F),
-            new HIDcode('3',false,0x20),
-            new HIDcode('4',false,0x21),
-            new HIDcode('5',false,0x22),
-            new HIDcode('6',false,0x23),
-            new HIDcode('7',false,0x24),
-            new HIDcode('8',false,0x25),
-            new HIDcode('9',false,0x26),
+            new HIDcode('0',"0",false,0x27),
+            new HIDcode('1',"1",false,0x1E),
+            new HIDcode('2',"2",false,0x1F),
+            new HIDcode('3',"3",false,0x20),
+            new HIDcode('4',"4",false,0x21),
+            new HIDcode('5',"5",false,0x22),
+            new HIDcode('6',"6",false,0x23),
+            new HIDcode('7',"7",false,0x24),
+            new HIDcode('8',"8",false,0x25),
+            new HIDcode('9',"9",false,0x26),
 
-            new HIDcode('a',false,0x04),
-            new HIDcode('b',false,0x05),
-            new HIDcode('c',false,0x06),
-            new HIDcode('d',false,0x07),
-            new HIDcode('e',false,0x08),
-            new HIDcode('f',false,0x09),
-            new HIDcode('g',false,0x0a),
-            new HIDcode('h',false,0x0b),
-            new HIDcode('i',false,0x0c),
-            new HIDcode('j',false,0x0d),
-            new HIDcode('k',false,0x0e),
-            new HIDcode('l',false,0x0f),
-            new HIDcode('m',false,0x10),
-            new HIDcode('n',false,0x11),
-            new HIDcode('o',false,0x12),
-            new HIDcode('p',false,0x13),
-            new HIDcode('q',false,0x14),
-            new HIDcode('r',false,0x15),
-            new HIDcode('s',false,0x16),
-            new HIDcode('t',false,0x17),
-            new HIDcode('u',false,0x18),
-            new HIDcode('v',false,0x19),
-            new HIDcode('w',false,0x1a),
-            new HIDcode('x',false,0x1b),
-            new HIDcode('y',false,0x1c),
-            new HIDcode('z',false,0x1d),
+            new HIDcode('a',"a",false,0x04),
+            new HIDcode('b',"b",false,0x05),
+            new HIDcode('c',"c",false,0x06),
+            new HIDcode('d',"d",false,0x07),
+            new HIDcode('e',"e",false,0x08),
+            new HIDcode('f',"f",false,0x09),
+            new HIDcode('g',"g",false,0x0a),
+            new HIDcode('h',"h",false,0x0b),
+            new HIDcode('i',"i",false,0x0c),
+            new HIDcode('j',"j",false,0x0d),
+            new HIDcode('k',"k",false,0x0e),
+            new HIDcode('l',"l",false,0x0f),
+            new HIDcode('m',"m",false,0x10),
+            new HIDcode('n',"n",false,0x11),
+            new HIDcode('o',"o",false,0x12),
+            new HIDcode('p',"p",false,0x13),
+            new HIDcode('q',"q",false,0x14),
+            new HIDcode('r',"r",false,0x15),
+            new HIDcode('s',"s",false,0x16),
+            new HIDcode('t',"t",false,0x17),
+            new HIDcode('u',"u",false,0x18),
+            new HIDcode('v',"v",false,0x19),
+            new HIDcode('w',"w",false,0x1a),
+            new HIDcode('x',"x",false,0x1b),
+            new HIDcode('y',"y",false,0x1c),
+            new HIDcode('z',"z",false,0x1d),
 
-            new HIDcode('A',true,0x04),
-            new HIDcode('B',true,0x05),
-            new HIDcode('C',true,0x06),
-            new HIDcode('D',true,0x07),
-            new HIDcode('E',true,0x08),
-            new HIDcode('F',true,0x09),
-            new HIDcode('G',true,0x0a),
-            new HIDcode('H',true,0x0b),
-            new HIDcode('I',true,0x0c),
-            new HIDcode('J',true,0x0d),
-            new HIDcode('K',true,0x0e),
-            new HIDcode('L',true,0x0f),
-            new HIDcode('M',true,0x10),
-            new HIDcode('N',true,0x11),
-            new HIDcode('O',true,0x12),
-            new HIDcode('P',true,0x13),
-            new HIDcode('Q',true,0x14),
-            new HIDcode('R',true,0x15),
-            new HIDcode('S',true,0x16),
-            new HIDcode('T',true,0x17),
-            new HIDcode('U',true,0x18),
-            new HIDcode('V',true,0x19),
-            new HIDcode('W',true,0x1a),
-            new HIDcode('X',true,0x1b),
-            new HIDcode('Y',true,0x1c),
-            new HIDcode('Z',true,0x1d),
+            new HIDcode('A',"A",true,0x04),
+            new HIDcode('B',"B",true,0x05),
+            new HIDcode('C',"C",true,0x06),
+            new HIDcode('D',"D",true,0x07),
+            new HIDcode('E',"E",true,0x08),
+            new HIDcode('F',"F",true,0x09),
+            new HIDcode('G',"G",true,0x0a),
+            new HIDcode('H',"H",true,0x0b),
+            new HIDcode('I',"I",true,0x0c),
+            new HIDcode('J',"J",true,0x0d),
+            new HIDcode('K',"K",true,0x0e),
+            new HIDcode('L',"L",true,0x0f),
+            new HIDcode('M',"M",true,0x10),
+            new HIDcode('N',"N",true,0x11),
+            new HIDcode('O',"O",true,0x12),
+            new HIDcode('P',"P",true,0x13),
+            new HIDcode('Q',"Q",true,0x14),
+            new HIDcode('R',"R",true,0x15),
+            new HIDcode('S',"S",true,0x16),
+            new HIDcode('T',"T",true,0x17),
+            new HIDcode('U',"U",true,0x18),
+            new HIDcode('V',"V",true,0x19),
+            new HIDcode('W',"W",true,0x1a),
+            new HIDcode('X',"X",true,0x1b),
+            new HIDcode('Y',"Y",true,0x1c),
+            new HIDcode('Z',"Z",true,0x1d),
     };
 
+    public static KeySequenceElement setShift() {
+        return new Modifier(false,true,false,false,false,false,false,false,true);
+    }
+    public static KeySequenceElement clrShift() {
+        return new Modifier(false,false,false,false,false,false,false,false,false);
+    }
+
+
     public static List<KeySequenceElement> fromString(String s) {
-        return Collections.emptyList();
+        ArrayList<KeySequenceElement> el = new ArrayList<>();
+        boolean isUpper = false;
+
+        List<Character> stuff = s.chars().mapToObj(v -> Character.valueOf((char)v)).collect(Collectors.toList());
+        enum CharMode { UPPER,LOWER };
+
+        CharMode currentMode = CharMode.LOWER;
+        KeyPress current = new KeyPress();
+        for(int i=0; i < stuff.size(); i++) {
+            if(currentMode == CharMode.LOWER && Character.isUpperCase(stuff.get(i))) {
+                System.out.println("Changing Case to Upper");
+                currentMode = CharMode.UPPER;
+                if(current.elements.size() > 0) {
+                    el.add(current);
+                    current = new KeyPress();
+                }
+                el.add(setShift());
+            } else if(currentMode == CharMode.UPPER && Character.isLowerCase(stuff.get(i))) {
+                System.out.println("Changing Case to Lower");
+                currentMode = CharMode.LOWER;
+                if(current.elements.size() > 0) {
+                    el.add(current);
+                    current = new KeyPress();
+                }
+                el.add(clrShift());
+            }
+            current.elements.add(stuff.get(i));
+        }
+        el.add(current);
+
+        return el;
     }
 
     public static String fromKeySequence(List<KeySequenceElement> items) {
