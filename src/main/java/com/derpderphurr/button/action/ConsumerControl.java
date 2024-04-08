@@ -5,6 +5,10 @@ import com.derpderphurr.button.ui.ConsumerEditor;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class ConsumerControl extends Action {
     public ConsumerControlAction getAction() {
@@ -18,12 +22,12 @@ public class ConsumerControl extends Action {
         this.action = a;
     }
     @Override
-    public byte[] toBytes() {
+    public Stream<Byte> toBytes() {
         ByteBuffer bb = ByteBuffer.allocate(3);
         bb.order(ByteOrder.LITTLE_ENDIAN);
         bb.put((byte)0xA6);
         bb.putShort((short)action.v);
-        return bb.array();
+        return IntStream.range(0,bb.array().length).mapToObj(i -> Byte.valueOf(bb.array()[i]));
     }
 
     @Override

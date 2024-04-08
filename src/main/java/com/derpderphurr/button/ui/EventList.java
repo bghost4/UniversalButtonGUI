@@ -42,6 +42,10 @@ public class EventList extends VBox {
         actions.getItems().addAll(newActions.stream().map(Action::createEditor).toList());
     }
 
+    public List<Action> getActions() {
+        return actions.getItems().stream().sequential().map(e -> e.getValue()).toList();
+    }
+
 
 
 }

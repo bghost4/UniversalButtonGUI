@@ -71,8 +71,26 @@ public class KeyboardSubEditor extends Dialog<KeyboardSequence> {
         });
     }
 
+
+
     private void generateTextFlow() {
 
     }
 
+    public void setValue(KeyboardSequence keyboardSequence) {
+        if(keyboardSequence != null) {
+            System.err.println("Keyboard Elements Size: "+keyboardSequence.getElements().size());
+            System.out.println("Elements: "+keyboardSequence.getElements());
+//            lstElements.getItems().clear();
+//            lstElements.getItems().addAll(keyboardSequence.getElements());
+            if(!lstElements.getItems().setAll(keyboardSequence.getElements())) {
+                System.err.println("Could Not Add Items");
+                lstElements.getItems().addAll(keyboardSequence.getElements());
+            }
+            System.out.println("Element Size: "+lstElements.getItems().size());
+
+        } else {
+            System.err.println("Sent Key Sequence Was Null");
+        }
+    }
 }
