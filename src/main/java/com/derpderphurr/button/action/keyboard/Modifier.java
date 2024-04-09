@@ -33,19 +33,19 @@ public class Modifier extends KeySequenceElement {
 
     @Override
     public Stream<Byte> toBytes() {
+        byte value = 0;
+        if(LEFT_CTRL) { value |= (byte)0x01; }
+        if(LEFT_ALT) { value |= (byte)0x04; }
+        if(LEFT_GUI) { value |= (byte)0x08; }
+        if(LEFT_SHIFT) { value |= (byte)0x02; }
+        if(RIGHT_ALT) { value |= (byte)0x040; }
+        if(RIGHT_GUI) { value |= 0x80; }
+        if(RIGHT_CTRL) { value |= 0x10; }
+        if(RIGHT_SHIFT) { value |= 0x20; }
         if(set) {
-            byte value = 0;
-            if(LEFT_CTRL) { value |= (byte)0x01; }
-            if(LEFT_ALT) { value |= (byte)0x04; }
-            if(LEFT_GUI) { value |= (byte)0x08; }
-            if(LEFT_SHIFT) { value |= (byte)0x02; }
-            if(RIGHT_ALT) { value |= (byte)0x040; }
-            if(RIGHT_GUI) { value |= 0x80; }
-            if(RIGHT_CTRL) { value |= 0x10; }
-            if(RIGHT_SHIFT) { value |= 0x20; }
             return Stream.of((byte)0xA2,value );
         } else {
-            return Stream.of( (byte)0xA3,(byte)0x00 );
+            return Stream.of( (byte)0xA3,value );
         }
     }
 

@@ -1,8 +1,6 @@
 package com.derpderphurr.button.ui;
 
-import com.derpderphurr.button.SerialInterface;
 import com.derpderphurr.button.action.Action;
-import com.derpderphurr.button.action.KeyboardSequence;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
