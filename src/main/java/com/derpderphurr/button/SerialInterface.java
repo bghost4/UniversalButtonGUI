@@ -1,6 +1,7 @@
 package com.derpderphurr.button;
 
 import com.fazecast.jSerialComm.SerialPort;
+import javafx.beans.property.SimpleBooleanProperty;
 
 import java.nio.ByteBuffer;
 import java.util.HexFormat;
@@ -10,7 +11,16 @@ public class SerialInterface {
 
     public enum BufferLocation { CLOCKWISE,ANTICLOCKWISE,PRESS };
 
-    public boolean isConnected(){ return false;}
+    private final SimpleBooleanProperty connected = new SimpleBooleanProperty(false);
+
+    public boolean isConnected() {
+        return connected.get();
+    }
+
+    public SimpleBooleanProperty connectedProperty() {
+        return connected;
+    }
+
     public boolean connect(SerialPort p) {
         this.serialPort = p;
 
@@ -20,6 +30,7 @@ public class SerialInterface {
         serialPort.setNumDataBits(8);
         serialPort.setParity(SerialPort.NO_PARITY);
         serialPort.setNumStopBits(1);
+        this.connected.set(true);
         return true;
     }
 
