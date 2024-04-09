@@ -73,7 +73,7 @@ public class SerialInterface {
 
         System.out.println(HexFormat.of().formatHex(stuff));
         bytes = serialPort.writeBytes(stuff,stuff.length);
-        //System.out.printf("Send %d Bytes\n",bytes);
+        System.out.printf("Send %d Bytes\n",bytes);
 
         byte[] report_bytes = new byte[1];
 
@@ -81,12 +81,12 @@ public class SerialInterface {
         while(bytes < 1) {
             bytes = serialPort.readBytes(report_bytes, 1);
         }
-        //System.out.printf("Report: %s - %d\n",HexFormat.of().formatHex(report_bytes),bytes);
+        System.out.printf("Report: %s - %d\n",HexFormat.of().formatHex(report_bytes),bytes);
         bytes = 0;
         while(bytes < 1) {
             bytes = serialPort.readBytes(report_bytes, 1);
         }
-        //System.out.printf("Report: %s - %d\n",HexFormat.of().formatHex(report_bytes),bytes);
+        System.out.printf("Report: %s - %d\n",HexFormat.of().formatHex(report_bytes),bytes);
     }
 
     public int readData(int size,byte[] buf) {

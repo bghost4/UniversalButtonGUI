@@ -24,7 +24,7 @@ public class ConsumerControl extends Action {
     @Override
     public Stream<Byte> toBytes() {
         ByteBuffer bb = ByteBuffer.allocate(3);
-        bb.order(ByteOrder.LITTLE_ENDIAN);
+        //bb.order(ByteOrder.LITTLE_ENDIAN);
         bb.put((byte)0xA6);
         bb.putShort((short)action.v);
         return IntStream.range(0,bb.array().length).mapToObj(i -> Byte.valueOf(bb.array()[i]));
