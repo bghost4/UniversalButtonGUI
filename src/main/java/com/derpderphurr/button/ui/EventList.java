@@ -9,6 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
+import java.util.Collections;
 import java.util.List;
 
 public class EventList extends VBox {
@@ -31,6 +32,24 @@ public class EventList extends VBox {
         btnAddKeyboard.setOnAction(eh -> actions.getItems().add(new KeyboardEditor()));
         btnAddConsumer.setOnAction( eh -> actions.getItems().add(new ConsumerEditor()));
         btnAddMouse.setOnAction( eh -> actions.getItems().add(new MouseEditor()));
+
+        btnMoveUp.setOnAction(eh -> {
+            int selectedIndex = actions.getSelectionModel().getSelectedIndex();
+            if(selectedIndex > 0) {
+                Collections.swap(actions.getItems(),selectedIndex,selectedIndex-1);
+            }
+        });
+        btnMoveDown.setOnAction( eh -> {
+            int selectedIndex = actions.getSelectionModel().getSelectedIndex();
+            if(selectedIndex < actions.getItems().size()-1) {
+                Collections.swap(actions.getItems(),selectedIndex,selectedIndex+1);
+            }
+        });
+        btnRemove.setOnAction( eh -> {
+                    int selectedIndex = actions.getSelectionModel().getSelectedIndex();
+                    actions.getItems().remove(selectedIndex);
+                }
+        );
 
     }
 

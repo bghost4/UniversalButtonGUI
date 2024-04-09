@@ -29,7 +29,7 @@ public class Launcher extends Application {
         Button btn = new Button("Push");
         btn.setOnAction(eh -> {
             List<Action> a = l.getActions();
-            List<Byte> stuff = a.stream().flatMap(s -> s.toBytes()).toList();
+            List<Byte> stuff = a.stream().flatMap(Action::toBytes).toList();
             byte[] raw = new byte[stuff.size()+1];
             for(int i=0; i < stuff.size(); i++) {
                 raw[i] = stuff.get(i);
