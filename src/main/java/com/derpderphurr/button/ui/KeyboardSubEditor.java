@@ -11,6 +11,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextFlow;
 
+import java.util.Collections;
+
 
 public class KeyboardSubEditor extends Dialog<KeyboardSequence> {
     private ListView<KeySequenceElement> lstElements = new ListView<>();
@@ -51,7 +53,39 @@ public class KeyboardSubEditor extends Dialog<KeyboardSequence> {
             });
         hbToggle.getChildren().addAll(tglLShift,tglLCtrl,tglLGUI,tglLAlt,tglRAlt,tglRGUI,tglRCtrl,tglRShift,btnSetModifiers,btnClrModifiers);
 
+        HBox hbListControls = new HBox();
+        Button btnUp = new Button("Up");
+        Button btnDown= new Button("Down");
+        Button btnDelete = new Button("Delete");
+
+        btnUp.setOnAction(eh ->{
+            int selectedIndex = lstElements.getSelectionModel().getSelectedIndex();
+            if( selectedIndex > 1) {
+                Collections.swap(lstElements.getItems(), selectedIndex,selectedIndex-1);
+            }
+        });
+
+        btnDown.setOnAction( eh ->{
+
+                int selectedIndex = lstElements.getSelectionModel().getSelectedIndex();
+                if(selectedIndex == -1) { return; }
+                if( selectedIndex < lstElements.getItems().size() - 1) {
+                    Collections.swap(lstElements.getItems(), selectedIndex,selectedIndex+1);
+                }
+
+        });
+
+        btnDelete.setOnAction(eh -> {
+            int selectedIndex = lstElements.getSelectionModel().getSelectedIndex();
+            if(selectedIndex != -1) {
+                lstElements.getItems().remove(selectedIndex);
+            }
+        });
+
+        hbListControls.getChildren().addAll(btnUp,btnDown,btnDelete);
+
         vb.getChildren().add(lstElements);
+        vb.getChildren().add(hbListControls);
         vb.getChildren().add(hbTextEntry);
         vb.getChildren().add(hbToggle);
         vb.getChildren().add(gp);

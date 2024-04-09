@@ -35,6 +35,7 @@ public class Launcher extends Application {
                 raw[i] = stuff.get(i);
             }
             raw[stuff.size()] = (byte)0x00;
+            System.out.println("Size: "+raw.length);
             si.putBuffer(SerialInterface.BufferLocation.PRESS,raw);
         });
 

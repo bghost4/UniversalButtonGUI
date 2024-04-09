@@ -9,9 +9,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class KeyboardStringConverter {
-    public record HIDcode(int c, String descr ,boolean shiftRequired, int hid_code) { }
+    public record HIDcode(int c, String descr ,boolean shiftRequired, int hid_code) {
+        @Override
+        public String toString() {
+            return descr();
+        }
+    }
 
     /* For More clarification see hid.h from TinyUSB Project */
     //I Suspect these are all associated with US Keyboard Layout
@@ -174,40 +180,10 @@ public class KeyboardStringConverter {
 
 
     public static List<KeySequenceElement> fromString(String s) {
-        ArrayList<KeySequenceElement> el = new ArrayList<>();
-        boolean isUpper = false;
-
-        List<Character> stuff = s.chars().mapToObj(v -> Character.valueOf((char)v)).collect(Collectors.toList());
-        enum CharMode { UPPER,LOWER };
-
-        CharMode currentMode = CharMode.LOWER;
-        KeyPress current = new KeyPress();
-        for(int i=0; i < stuff.size(); i++) {
-            if(currentMode == CharMode.LOWER && Character.isUpperCase(stuff.get(i))) {
-                System.out.println("Changing Case to Upper");
-                currentMode = CharMode.UPPER;
-                if(current.elements.size() > 0) {
-                    el.add(current);
-                    current = new KeyPress();
-                }
-                el.add(setShift());
-            } else if(currentMode == CharMode.UPPER && Character.isLowerCase(stuff.get(i))) {
-                System.out.println("Changing Case to Lower");
-                currentMode = CharMode.LOWER;
-                if(current.elements.size() > 0) {
-                    el.add(current);
-                    current = new KeyPress();
-                }
-                el.add(clrShift());
-            }
-            Optional<HIDcode> oc = KeyboardStringConverter.lookupByChar(stuff.get(i));
-            if(oc.isPresent()) {
-                current.elements.add(oc.get());
-            }
-        }
-        el.add(current);
-
-        return el;
+        List<HIDcode> e = s.chars().mapToObj(i -> lookupByChar(Character.valueOf((char)i))).flatMap(oh -> oh.isPresent() ? Stream.of(oh.get()) : Stream.empty()).collect(Collectors.toList());
+        KeyPress kp = new KeyPress();
+        kp.elements.addAll(e);
+        return Stream.of(kp).collect(Collectors.toList());
     }
 
     private static Optional<HIDcode> lookupByChar(Character character) {
