@@ -24,10 +24,9 @@ public class KeyboardStringConverter {
 
     //Keys Not printable
     public static final HIDcode[] specialKeys  = {
-        new HIDcode(0,"Backspace",false,0x2a), //Backspace
+        new HIDcode(0,"\u2190BS",false,0x2a), //Backspace
         new HIDcode(0,"TAB",false,0x2B), //TAB
-        new HIDcode(0,"LF",false,0x28), //Line Feed
-        new HIDcode(0,"CR",false,0x28), //Carrige Return
+        new HIDcode(0,"\u21b5",false,0x28), //Enter
         new HIDcode(0,"ESC",false,0x29), //Escape
         new HIDcode(0,"CapsLock",false,0x39),
         new HIDcode(0,"F1",false,0x3A),
@@ -53,10 +52,10 @@ public class KeyboardStringConverter {
         new HIDcode(0,"Delete",false,0x4C),
         new HIDcode(0,"End",false,0x4D),
         new HIDcode(0,"PgDn",false,0x4E),
-        new HIDcode(0,"AR",false,0x4F), //Arrow Right
-        new HIDcode(0,"AL",false,0x50), //Arrow Left
-        new HIDcode(0,"AD",false,0x51), //Arrow Down
-        new HIDcode(0,"AU",false,0x52) //Arrow Up
+        new HIDcode(0,"\u2192",false,0x4F), //Arrow Right
+        new HIDcode(0,"\u2190",false,0x50), //Arrow Left
+        new HIDcode(0,"\u2193",false,0x51), //Arrow Down
+        new HIDcode(0,"\u2191",false,0x52) //Arrow Up
     };
 
     public static final HIDcode[] HIDCodeBlock = {

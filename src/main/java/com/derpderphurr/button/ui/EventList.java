@@ -1,7 +1,9 @@
 package com.derpderphurr.button.ui;
 
 import com.derpderphurr.button.action.Action;
+import com.derpderphurr.button.action.ConsumerControl;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -11,7 +13,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class EventList extends VBox {
-    private final ListView<ActionEditor<? extends Action>> actions = new ListView<>();
+    private final ListView<Action> actions = new ListView<>();
 
     public EventList() {
 
@@ -27,9 +29,11 @@ public class EventList extends VBox {
         hb.getChildren().addAll(btnMoveUp, btnAddKeyboard, btnAddConsumer, btnAddMouse, btnRemove, btnMoveDown);
         getChildren().add(hb);
 
-        btnAddKeyboard.setOnAction(eh -> actions.getItems().add(new KeyboardEditor()));
-        btnAddConsumer.setOnAction(eh -> actions.getItems().add(new ConsumerEditor()));
-        btnAddMouse.setOnAction(eh -> actions.getItems().add(new MouseEditor()));
+        btnAddKeyboard.setOnAction(eh -> new KeyboardEditor().showAndWait().ifPresent(ka -> actions.getItems().add(ka)));
+        btnAddConsumer.setOnAction(eh -> new ChoiceDialog<>(null,ConsumerControl.values).showAndWait().ifPresent(cc -> actions.getItems().add(cc)));
+        btnAddMouse.setOnAction(eh -> new MouseEditor().showAndWait().ifPresent(ma -> actions.getItems().add(ma)));
+
+
 
         btnMoveUp.setOnAction(eh -> {
             int selectedIndex = actions.getSelectionModel().getSelectedIndex();
@@ -52,7 +56,7 @@ public class EventList extends VBox {
     }
 
     public List<? extends Action> getActions() {
-        return actions.getItems().stream().sequential().map(ActionEditor::getValue).toList();
+        return actions.getItems().stream().sequential().toList();
     }
 
 
