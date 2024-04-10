@@ -2,6 +2,7 @@ package com.derpderphurr.button.ui;
 
 import com.derpderphurr.button.action.KeyboardSequence;
 import com.derpderphurr.button.action.KeyboardStringConverter;
+import com.derpderphurr.button.action.keyboard.KeyPress;
 import com.derpderphurr.button.action.keyboard.KeySequenceElement;
 import com.derpderphurr.button.action.keyboard.Modifier;
 import javafx.scene.control.*;
@@ -11,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.TextFlow;
 
 import java.util.Collections;
+import java.util.function.Consumer;
 
 
 public class KeyboardSubEditor extends Dialog<KeyboardSequence> {
@@ -80,6 +82,7 @@ public class KeyboardSubEditor extends Dialog<KeyboardSequence> {
         vb.getChildren().add(hbListControls);
         vb.getChildren().add(hbTextEntry);
         vb.getChildren().add(hbToggle);
+        vb.getChildren().add(createSpecial());
         vb.getChildren().add(gp);
         TextFlow txtFlow = new TextFlow();
         vb.getChildren().add(txtFlow);
@@ -98,6 +101,32 @@ public class KeyboardSubEditor extends Dialog<KeyboardSequence> {
         });
     }
 
+    private static Button createKeyButton(KeyboardStringConverter.HIDcode code, Consumer<KeyboardStringConverter.HIDcode> action) {
+        Button b = new Button(code.descr());
+        b.setOnAction(eh -> action.accept(code));
+        return b;
+    }
+
+    private GridPane createSpecial() {
+
+        Consumer<KeyboardStringConverter.HIDcode> action = code -> {
+            KeyPress kp = new KeyPress();
+            kp.elements.add(code);
+            this.lstElements.getItems().add(kp);
+        };
+
+        GridPane gp = new GridPane();
+        int width = 8;
+        int y = 0;
+        for(int i=0; i < KeyboardStringConverter.specialKeys.length; i++) {
+            if(i != 0 && i%width==0) {
+                y++;
+            }
+            Button special = createKeyButton(KeyboardStringConverter.specialKeys[i],action);
+            gp.add(special,i % width,y);
+        }
+        return gp;
+    }
 
     public void setValue(KeyboardSequence keyboardSequence) {
         if(keyboardSequence != null) {
