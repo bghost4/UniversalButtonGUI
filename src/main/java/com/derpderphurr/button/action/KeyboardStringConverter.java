@@ -4,7 +4,6 @@ import com.derpderphurr.button.action.keyboard.KeyPress;
 import com.derpderphurr.button.action.keyboard.KeySequenceElement;
 import com.derpderphurr.button.action.keyboard.Modifier;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -187,13 +186,11 @@ public class KeyboardStringConverter {
     }
 
     private static Optional<HIDcode> lookupByChar(Character character) {
-        //TODO hash lookup would be faster here
         return Arrays.stream(HIDCodeBlock).filter(c -> c.c==character.charValue()).findFirst();
     }
 
-
-
     public static String fromKeySequence(List<KeySequenceElement> items) {
+        //TODO implement me
         return "Not Yet Implemented";
     }
 

@@ -51,14 +51,6 @@ public class EventList extends VBox {
 
     }
 
-    public void clear() {
-        actions.getItems().clear();
-    }
-
-    public void addAll(List<Action> newActions) {
-        actions.getItems().addAll(newActions.stream().map(Action::createEditor).toList());
-    }
-
     public List<Action> getActions() {
         return actions.getItems().stream().sequential().map(e -> e.getValue()).toList();
     }

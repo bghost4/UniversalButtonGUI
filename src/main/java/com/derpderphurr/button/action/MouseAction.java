@@ -1,7 +1,5 @@
 package com.derpderphurr.button.action;
 
-import com.derpderphurr.button.ui.ActionEditor;
-
 import java.nio.ByteBuffer;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -26,8 +24,4 @@ public class MouseAction extends Action {
         return IntStream.range(0,bb.array().length).mapToObj(i -> Byte.valueOf(bb.array()[i]));
     }
 
-    @Override
-    public ActionEditor<?> createEditor() {
-        return null;
-    }
 }
