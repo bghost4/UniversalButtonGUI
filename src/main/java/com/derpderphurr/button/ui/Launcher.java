@@ -55,12 +55,20 @@ public class Launcher extends Application {
 
         Button btn = new Button("Push To Device");
         btn.disableProperty().bind(si.connectedProperty().not());
+        Button btnStore = new Button("Program Current to Flash");
+        btnStore.disableProperty().bind(si.connectedProperty().not());
+        Button btnReadFlash = new Button("Read Flash");
+        btnReadFlash.disableProperty().bind(si.connectedProperty().not());
 
         btn.setOnAction(eh -> {
             pushActions(elACW, SerialInterface.BufferLocation.ANTICLOCKWISE);
             pushActions(elCW, SerialInterface.BufferLocation.CLOCKWISE);
             pushActions(elPress, SerialInterface.BufferLocation.PRESS);
         });
+
+        btnStore.setOnAction(eh -> si.storeToFlash());
+
+        btnReadFlash.setOnAction(eh -> si.printFlash());
 
         HBox hbLists = new HBox();
         hbLists.disableProperty().bind(si.connectedProperty().not());
@@ -69,7 +77,11 @@ public class Launcher extends Application {
         VBox vb = new VBox();
         vb.getChildren().add(hbSerial);
         vb.getChildren().add(hbLists);
-        vb.getChildren().add(btn);
+
+        HBox hbPush = new HBox();
+        hbPush.getChildren().addAll(btn,btnStore,btnReadFlash);
+        vb.getChildren().add(hbPush);
+
         Scene s = new Scene(vb);
         primaryStage.setTitle("Universal Button Controls");
         primaryStage.setScene(s);

@@ -9,6 +9,18 @@ import java.util.HexFormat;
 public class SerialInterface {
     private SerialPort serialPort;
 
+    public void storeToFlash() {
+        serialPort.writeBytes("SS".getBytes(),2);
+    }
+
+    public void printFlash() {
+        int bytes = 16 ;
+        serialPort.writeBytes("GS".getBytes(),2);
+        byte[] buffer = new byte[bytes];
+        serialPort.readBytes(buffer,bytes);
+        System.out.println(HexFormat.of().formatHex(buffer));
+    }
+
     public enum BufferLocation { CLOCKWISE,ANTICLOCKWISE,PRESS }
 
     private final SimpleBooleanProperty connected = new SimpleBooleanProperty(false);
