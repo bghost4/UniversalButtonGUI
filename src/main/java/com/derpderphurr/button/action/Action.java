@@ -1,7 +1,5 @@
 package com.derpderphurr.button.action;
 
-import com.derpderphurr.button.ui.ActionEditor;
-
 import java.util.stream.Stream;
 
 public abstract class Action {

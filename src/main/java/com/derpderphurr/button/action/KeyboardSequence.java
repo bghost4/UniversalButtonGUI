@@ -18,6 +18,6 @@ public class KeyboardSequence extends Action {
 
     @Override
     public Stream<Byte> toBytes() {
-        return elements.stream().flatMap(e -> e.toBytes());
+        return elements.stream().flatMap(KeySequenceElement::toBytes);
     }
 }

@@ -20,7 +20,7 @@ public class ConsumerControl extends Action {
         ByteBuffer bb = ByteBuffer.allocate(3);
         bb.put((byte)0xA6);
         bb.putShort((short)action.v);
-        return IntStream.range(0,bb.array().length).mapToObj(i -> Byte.valueOf(bb.array()[i]));
+        return IntStream.range(0,bb.array().length).mapToObj(i -> bb.array()[i]);
     }
 
     public enum ConsumerControlAction {

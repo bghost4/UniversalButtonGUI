@@ -5,12 +5,10 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.TextFlow;
 
 public class KeyboardEditor extends ActionEditor<KeyboardSequence> {
 
     private final Label lblSummary = new Label();
-    private final Button btnEdit = new Button("edit");
 
     private final SimpleObjectProperty<KeyboardSequence> keyboardSequence = new SimpleObjectProperty<>();
 
@@ -18,11 +16,12 @@ public class KeyboardEditor extends ActionEditor<KeyboardSequence> {
 
     public KeyboardEditor() {
         HBox hbLayout = new HBox();
+        Button btnEdit = new Button("edit");
         btnEdit.setOnAction(eh -> {
             myKeyboardSubEditor.setValue(getValue());
             myKeyboardSubEditor.showAndWait().ifPresent(this::setValue);
         });
-        hbLayout.getChildren().addAll(lblSummary,btnEdit);
+        hbLayout.getChildren().addAll(lblSummary, btnEdit);
         getChildren().add(hbLayout);
     }
 

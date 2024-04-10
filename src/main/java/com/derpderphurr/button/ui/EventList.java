@@ -11,25 +11,25 @@ import java.util.Collections;
 import java.util.List;
 
 public class EventList extends VBox {
-    private final ListView<ActionEditor> actions = new ListView<>();
-    private final Button btnAddConsumer = new Button("+Consumer"),
-            btnAddMouse = new Button("+Mouse"),
-            btnAddKeyboard = new Button("+Keyboard"),
-            btnRemove = new Button("Delete"),
-            btnMoveUp = new Button("Up"),
-            btnMoveDown = new Button("Down");
+    private final ListView<ActionEditor<? extends Action>> actions = new ListView<>();
 
     public EventList() {
 
         getChildren().add(actions);
         VBox.setVgrow(actions, Priority.ALWAYS);
         HBox hb = new HBox();
-        hb.getChildren().addAll(btnMoveUp,btnAddKeyboard,btnAddConsumer,btnAddMouse,btnRemove,btnMoveDown);
+        Button btnMoveDown = new Button("Down");
+        Button btnMoveUp = new Button("Up");
+        Button btnRemove = new Button("Delete");
+        Button btnAddKeyboard = new Button("+Keyboard");
+        Button btnAddMouse = new Button("+Mouse");
+        Button btnAddConsumer = new Button("+Consumer");
+        hb.getChildren().addAll(btnMoveUp, btnAddKeyboard, btnAddConsumer, btnAddMouse, btnRemove, btnMoveDown);
         getChildren().add(hb);
 
         btnAddKeyboard.setOnAction(eh -> actions.getItems().add(new KeyboardEditor()));
-        btnAddConsumer.setOnAction( eh -> actions.getItems().add(new ConsumerEditor()));
-        btnAddMouse.setOnAction( eh -> actions.getItems().add(new MouseEditor()));
+        btnAddConsumer.setOnAction(eh -> actions.getItems().add(new ConsumerEditor()));
+        btnAddMouse.setOnAction(eh -> actions.getItems().add(new MouseEditor()));
 
         btnMoveUp.setOnAction(eh -> {
             int selectedIndex = actions.getSelectionModel().getSelectedIndex();
@@ -37,13 +37,13 @@ public class EventList extends VBox {
                 Collections.swap(actions.getItems(),selectedIndex,selectedIndex-1);
             }
         });
-        btnMoveDown.setOnAction( eh -> {
+        btnMoveDown.setOnAction(eh -> {
             int selectedIndex = actions.getSelectionModel().getSelectedIndex();
             if(selectedIndex < actions.getItems().size()-1) {
                 Collections.swap(actions.getItems(),selectedIndex,selectedIndex+1);
             }
         });
-        btnRemove.setOnAction( eh -> {
+        btnRemove.setOnAction(eh -> {
                     int selectedIndex = actions.getSelectionModel().getSelectedIndex();
                     actions.getItems().remove(selectedIndex);
                 }
@@ -51,8 +51,8 @@ public class EventList extends VBox {
 
     }
 
-    public List<Action> getActions() {
-        return actions.getItems().stream().sequential().map(e -> e.getValue()).toList();
+    public List<? extends Action> getActions() {
+        return actions.getItems().stream().sequential().map(ActionEditor::getValue).toList();
     }
 
 

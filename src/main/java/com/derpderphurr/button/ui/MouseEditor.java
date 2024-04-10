@@ -8,9 +8,8 @@ import javafx.scene.layout.HBox;
 
 public class MouseEditor extends ActionEditor<MouseAction> {
 
-    private final Label lblDisplay = new Label();
-    private SimpleObjectProperty<MouseAction> value = new SimpleObjectProperty<>();
-    private MouseSubEditor subEditor = new MouseSubEditor();
+    private final SimpleObjectProperty<MouseAction> value = new SimpleObjectProperty<>();
+    private final MouseSubEditor subEditor = new MouseSubEditor();
 
     public MouseEditor() {
         HBox hbLayout = new HBox();
@@ -19,8 +18,9 @@ public class MouseEditor extends ActionEditor<MouseAction> {
                     if (value.get() != null) {
                         subEditor.setValue(value.get());
                     }
-            subEditor.showAndWait().ifPresent(m -> value.set(m));
+            subEditor.showAndWait().ifPresent(value::set);
                 });
+        Label lblDisplay = new Label();
         hbLayout.getChildren().addAll(lblDisplay,btnEdit);
         getChildren().addAll(hbLayout);
     }
@@ -32,7 +32,7 @@ public class MouseEditor extends ActionEditor<MouseAction> {
 
     @Override
     public MouseAction getValue() {
-        //get event from sub editor
+        //get event from sub-editor
         return value.get();
     }
 }

@@ -14,7 +14,6 @@ import javafx.stage.Stage;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 public class Launcher extends Application {
@@ -78,7 +77,7 @@ public class Launcher extends Application {
     }
 
     public void pushActions(EventList el, SerialInterface.BufferLocation bl) {
-        List<Action> a = el.getActions();
+        List<? extends Action> a = el.getActions();
         List<Byte> stuff = a.stream().flatMap(Action::toBytes).toList();
         byte[] raw = new byte[stuff.size()+1];
         for(int i=0; i < stuff.size(); i++) {

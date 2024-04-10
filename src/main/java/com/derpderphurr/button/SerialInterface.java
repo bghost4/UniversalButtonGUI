@@ -9,7 +9,7 @@ import java.util.HexFormat;
 public class SerialInterface {
     private SerialPort serialPort;
 
-    public enum BufferLocation { CLOCKWISE,ANTICLOCKWISE,PRESS };
+    public enum BufferLocation { CLOCKWISE,ANTICLOCKWISE,PRESS }
 
     private final SimpleBooleanProperty connected = new SimpleBooleanProperty(false);
 
@@ -21,7 +21,7 @@ public class SerialInterface {
         return connected;
     }
 
-    public boolean connect(SerialPort p) {
+    public void connect(SerialPort p) {
         this.serialPort = p;
 
         serialPort.openPort();
@@ -31,7 +31,6 @@ public class SerialInterface {
         serialPort.setParity(SerialPort.NO_PARITY);
         serialPort.setNumStopBits(1);
         this.connected.set(true);
-        return true;
     }
 
     //For some reason, this one corrupts the input, and I haven't figured out why, makes me pisstified
@@ -80,7 +79,7 @@ public class SerialInterface {
         //System.out.println("Sending Bytes: ");
         System.out.println(HexFormat.of().formatHex(buf.array()));
         int bytes = serialPort.writeBytes(buf.array(),buf.array().length);
-        //System.out.printf("Send %d Bytes\n",bytes);
+        System.out.printf("Send %d Bytes\n",bytes);
 
         System.out.println(HexFormat.of().formatHex(stuff));
         bytes = serialPort.writeBytes(stuff,stuff.length);
@@ -97,8 +96,8 @@ public class SerialInterface {
 
     }
 
-    public int readData(int size,byte[] buf) {
-        return serialPort.readBytes(buf,size);
+    public void readData(int size, byte[] buf) {
+        serialPort.readBytes(buf, size);
     }
 
     public byte[] getAction(BufferLocation loc) {
@@ -117,7 +116,6 @@ public class SerialInterface {
 
         //Maybe I should have it send the size back before the buffer this has to timeout
         int bytes = serialPort.readBytes(buffer, 64);
-        total_bytes += bytes;
         //System.out.printf("Got %d bytes\n", bytes);
 
         return buffer;

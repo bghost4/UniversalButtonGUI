@@ -12,10 +12,10 @@ public class MouseSubEditor extends Dialog<MouseAction> {
             spnSX = new Spinner<>(),
             spnSY = new Spinner<>();
 
-    SpinnerValueFactory<Integer> smX = new SpinnerValueFactory.IntegerSpinnerValueFactory(-127,127,0),
-            smY = new SpinnerValueFactory.IntegerSpinnerValueFactory(-127,127,0),
-            smSX = new SpinnerValueFactory.IntegerSpinnerValueFactory(-127,127,0),
-            smSY = new SpinnerValueFactory.IntegerSpinnerValueFactory(-127,127,0);
+    final SpinnerValueFactory<Integer> smX = new SpinnerValueFactory.IntegerSpinnerValueFactory(-127,127,0);
+    final SpinnerValueFactory<Integer> smY = new SpinnerValueFactory.IntegerSpinnerValueFactory(-127,127,0);
+    final SpinnerValueFactory<Integer> smSX = new SpinnerValueFactory.IntegerSpinnerValueFactory(-127,127,0);
+    final SpinnerValueFactory<Integer> smSY = new SpinnerValueFactory.IntegerSpinnerValueFactory(-127,127,0);
 
     private final ToggleButton
             btnLeftClick = new ToggleButton("L"),

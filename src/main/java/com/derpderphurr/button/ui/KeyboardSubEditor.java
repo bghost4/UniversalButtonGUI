@@ -4,7 +4,6 @@ import com.derpderphurr.button.action.KeyboardSequence;
 import com.derpderphurr.button.action.KeyboardStringConverter;
 import com.derpderphurr.button.action.keyboard.KeySequenceElement;
 import com.derpderphurr.button.action.keyboard.Modifier;
-import javafx.beans.InvalidationListener;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -15,9 +14,8 @@ import java.util.Collections;
 
 
 public class KeyboardSubEditor extends Dialog<KeyboardSequence> {
-    private ListView<KeySequenceElement> lstElements = new ListView<>();
+    private final ListView<KeySequenceElement> lstElements = new ListView<>();
     private final TextArea txtEntry = new TextArea();
-    private final TextFlow txtFlow = new TextFlow();
 
     //Toggle Buttons for Modifiers
     private final ToggleButton
@@ -35,8 +33,6 @@ public class KeyboardSubEditor extends Dialog<KeyboardSequence> {
         VBox vb = new VBox();
         GridPane gp = new GridPane();
 
-        lstElements.getItems().addListener( (InvalidationListener)  il -> generateTextFlow() );
-
         Button btnAddText = new Button("Add");
         btnAddText.setOnAction(a -> lstElements.getItems().addAll(KeyboardStringConverter.fromString(txtEntry.getText())) );
         HBox hbTextEntry = new HBox();
@@ -44,13 +40,9 @@ public class KeyboardSubEditor extends Dialog<KeyboardSequence> {
 
         HBox hbToggle = new HBox();
         Button btnSetModifiers = new Button("Set Modifiers");
-            btnSetModifiers.setOnAction(eh -> {
-                lstElements.getItems().add(new Modifier(tglLCtrl.isSelected(),tglLShift.isSelected(),tglLAlt.isSelected(),tglLGUI.isSelected(),tglRCtrl.isSelected(),tglRShift.isSelected(),tglRAlt.isSelected(),tglRGUI.isSelected(),true));
-            });
+            btnSetModifiers.setOnAction(eh -> lstElements.getItems().add(new Modifier(tglLCtrl.isSelected(),tglLShift.isSelected(),tglLAlt.isSelected(),tglLGUI.isSelected(),tglRCtrl.isSelected(),tglRShift.isSelected(),tglRAlt.isSelected(),tglRGUI.isSelected(),true)));
         Button btnClrModifiers = new Button("Clr Modifiers");
-            btnClrModifiers.setOnAction(eh -> {
-                lstElements.getItems().add(new Modifier(tglLCtrl.isSelected(),tglLShift.isSelected(),tglLAlt.isSelected(),tglLGUI.isSelected(),tglRCtrl.isSelected(),tglRShift.isSelected(),tglRAlt.isSelected(),tglRGUI.isSelected(),false));
-            });
+            btnClrModifiers.setOnAction(eh -> lstElements.getItems().add(new Modifier(tglLCtrl.isSelected(),tglLShift.isSelected(),tglLAlt.isSelected(),tglLGUI.isSelected(),tglRCtrl.isSelected(),tglRShift.isSelected(),tglRAlt.isSelected(),tglRGUI.isSelected(),false)));
         hbToggle.getChildren().addAll(tglLShift,tglLCtrl,tglLGUI,tglLAlt,tglRAlt,tglRGUI,tglRCtrl,tglRShift,btnSetModifiers,btnClrModifiers);
 
         HBox hbListControls = new HBox();
@@ -89,6 +81,7 @@ public class KeyboardSubEditor extends Dialog<KeyboardSequence> {
         vb.getChildren().add(hbTextEntry);
         vb.getChildren().add(hbToggle);
         vb.getChildren().add(gp);
+        TextFlow txtFlow = new TextFlow();
         vb.getChildren().add(txtFlow);
 
 
@@ -106,17 +99,10 @@ public class KeyboardSubEditor extends Dialog<KeyboardSequence> {
     }
 
 
-
-    private void generateTextFlow() {
-
-    }
-
     public void setValue(KeyboardSequence keyboardSequence) {
         if(keyboardSequence != null) {
             System.err.println("Keyboard Elements Size: "+keyboardSequence.getElements().size());
             System.out.println("Elements: "+keyboardSequence.getElements());
-//            lstElements.getItems().clear();
-//            lstElements.getItems().addAll(keyboardSequence.getElements());
             if(!lstElements.getItems().setAll(keyboardSequence.getElements())) {
                 System.err.println("Could Not Add Items");
                 lstElements.getItems().addAll(keyboardSequence.getElements());

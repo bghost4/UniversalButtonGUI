@@ -46,7 +46,7 @@ public class KeyboardStringConverter {
         new HIDcode(0,"SysReq",false,0x9A),
         new HIDcode(0,"ScrLK",false,0x47),
         new HIDcode(0,"Pause",false,0x48),
-        //new SpecialKey("Break",true,0x48), Not sure if this is actually Implemented In HID Keycodes, as SysReq is it's own key
+        //new SpecialKey("Break",true,0x48), Not sure if this is actually Implemented In HID Keycodes, as SysReq is its own key
         new HIDcode(0,"Ins",false,0x49),
         new HIDcode(0,"Home",false,0x4A),
         new HIDcode(0,"PgUp",false,0x4B),
@@ -92,7 +92,7 @@ public class KeyboardStringConverter {
             new HIDcode(':',":",true,0x33),
             new HIDcode(';',";",false,0x33),
 
-            new HIDcode('\'',"\'",false,0x34),
+            new HIDcode('\'',"'",false,0x34),
             new HIDcode('\"',"\"",true,0x34),
 
             new HIDcode(',',",",false,0x36),
@@ -179,14 +179,14 @@ public class KeyboardStringConverter {
 
 
     public static List<KeySequenceElement> fromString(String s) {
-        List<HIDcode> e = s.chars().mapToObj(i -> lookupByChar(Character.valueOf((char)i))).flatMap(oh -> oh.isPresent() ? Stream.of(oh.get()) : Stream.empty()).collect(Collectors.toList());
+        List<HIDcode> e = s.chars().mapToObj(i -> lookupByChar((char) i)).flatMap(oh -> oh.stream().flatMap(Stream::of)).toList();
         KeyPress kp = new KeyPress();
         kp.elements.addAll(e);
         return Stream.of(kp).collect(Collectors.toList());
     }
 
     private static Optional<HIDcode> lookupByChar(Character character) {
-        return Arrays.stream(HIDCodeBlock).filter(c -> c.c==character.charValue()).findFirst();
+        return Arrays.stream(HIDCodeBlock).filter(c -> c.c== character).findFirst();
     }
 
     public static String fromKeySequence(List<KeySequenceElement> items) {

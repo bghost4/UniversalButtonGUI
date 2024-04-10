@@ -21,7 +21,7 @@ public class MouseAction extends Action {
         bb.put((byte)sy);
         bb.put((byte)sx);
 
-        return IntStream.range(0,bb.array().length).mapToObj(i -> Byte.valueOf(bb.array()[i]));
+        return IntStream.range(0,bb.array().length).mapToObj(i -> bb.array()[i]);
     }
 
 }

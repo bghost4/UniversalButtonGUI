@@ -1,15 +1,20 @@
 package com.derpderphurr.button.action.keyboard;
 
-import java.lang.module.ModuleFinder;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Modifier extends KeySequenceElement {
     //Magic Number 0xA2(press)0xA3(release)
-    private boolean LEFT_CTRL,LEFT_SHIFT,LEFT_ALT,LEFT_GUI,RIGHT_CTRL,RIGHT_SHIFT,RIGHT_ALT,RIGHT_GUI;
-    private boolean set = false;
+    private final boolean LEFT_CTRL;
+    private final boolean LEFT_SHIFT;
+    private final boolean LEFT_ALT;
+    private final boolean LEFT_GUI;
+    private final boolean RIGHT_CTRL;
+    private final boolean RIGHT_SHIFT;
+    private final boolean RIGHT_ALT;
+    private final boolean RIGHT_GUI;
+    private final boolean set;
 
     public static Modifier setShift() {
         return new Modifier(false,true,false,false,false,false,false,false,true);
@@ -61,6 +66,6 @@ public class Modifier extends KeySequenceElement {
         if(RIGHT_GUI) { items.add("RGUI"); }
         if(RIGHT_CTRL) { items.add("RCtrl"); }
         if(RIGHT_SHIFT) { items.add("RShift"); }
-        return String.format("%s - %s",mode,items.stream().collect(Collectors.joining(",")));
+        return String.format("%s - %s",mode, String.join(",", items));
     }
 }
