@@ -23,13 +23,13 @@ public class ActionListCell extends ListCell<Action> {
             if (this.getItem() instanceof KeyboardSequence ks) {
                 KeyboardEditor ke = new KeyboardEditor();
                 ke.setValue(ks);
-                ke.showAndWait().ifPresent(this::setItem);
+                ke.showAndWait().ifPresent(nks -> this.getListView().getItems().set(this.getIndex(),nks));
             } else if (this.getItem() instanceof ConsumerControl cc) {
-                new ChoiceDialog<>(cc,ConsumerControl.values).showAndWait().ifPresent(this::setItem);
+                new ChoiceDialog<>(cc,ConsumerControl.values).showAndWait().ifPresent(ncc -> this.getListView().getItems().set(this.getIndex(),ncc));
             } else if (this.getItem() instanceof MouseAction ma) {
                 MouseEditor me = new MouseEditor();
                 me.setValue(ma);
-                me.showAndWait().ifPresent(this::setItem);
+                me.showAndWait().ifPresent(nma -> this.getListView().getItems().set(this.getIndex(),nma));
             } else {
                 //Do Nothing
             }
