@@ -4,6 +4,7 @@ import com.derpderphurr.button.action.KeyboardStringConverter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class KeyPress extends KeySequenceElement {
@@ -50,7 +51,7 @@ public class KeyPress extends KeySequenceElement {
     @Override
     public String toString() {
         return "KeyPress{" +
-                "elements=" + elements +
+                elements.stream().map(KeyboardStringConverter.HIDcode::descr).collect(Collectors.joining()) +
                 '}';
     }
 }

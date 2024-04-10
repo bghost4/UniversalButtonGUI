@@ -22,7 +22,7 @@ public class KeyboardStringConverter {
     //I Suspect these are all associated with US Keyboard Layout
 
 
-    //Keys Not printable
+    //Keys Not printable or not "seen" in a TextArea/TextField
     public static final HIDcode[] specialKeys  = {
         new HIDcode(0,"\u2190BS",false,0x2a), //Backspace
         new HIDcode(0,"TAB",false,0x2B), //TAB
@@ -57,6 +57,7 @@ public class KeyboardStringConverter {
         new HIDcode(0,"\u2191",false,0x52) //Arrow Up
     };
 
+// Used for all String -> HIDcode conversions
     public static final HIDcode[] HIDCodeBlock = {
             //Punctuation & Num Keys
             new HIDcode('\t',"\t",false,0x2B), //TAB

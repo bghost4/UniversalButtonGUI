@@ -33,7 +33,7 @@ public class EventList extends VBox {
         btnAddConsumer.setOnAction(eh -> new ChoiceDialog<>(null,ConsumerControl.values).showAndWait().ifPresent(cc -> actions.getItems().add(cc)));
         btnAddMouse.setOnAction(eh -> new MouseEditor().showAndWait().ifPresent(ma -> actions.getItems().add(ma)));
 
-
+        actions.setCellFactory(view -> new ActionListCell());
 
         btnMoveUp.setOnAction(eh -> {
             int selectedIndex = actions.getSelectionModel().getSelectedIndex();

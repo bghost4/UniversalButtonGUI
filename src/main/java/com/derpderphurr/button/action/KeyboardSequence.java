@@ -20,4 +20,9 @@ public class KeyboardSequence extends Action {
     public Stream<Byte> toBytes() {
         return elements.stream().flatMap(KeySequenceElement::toBytes);
     }
+
+    @Override
+    public String toString() {
+        return "Keys{" + elements + '}';
+    }
 }

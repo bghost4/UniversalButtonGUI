@@ -24,4 +24,18 @@ public class MouseAction extends Action {
         return IntStream.range(0,bb.array().length).mapToObj(i -> bb.array()[i]);
     }
 
+    @Override
+    public String toString() {
+        return "MouseAction{" +
+                "left_button=" + left_button +
+                ", right_button=" + right_button +
+                ", middle_button=" + middle_button +
+                ", forward_button=" + forward_button +
+                ", back_button=" + back_button +
+                ", x=" + x +
+                ", y=" + y +
+                ", sx=" + sx +
+                ", sy=" + sy +
+                '}';
+    }
 }
