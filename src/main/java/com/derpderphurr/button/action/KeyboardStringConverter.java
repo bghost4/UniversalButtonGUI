@@ -179,7 +179,7 @@ public class KeyboardStringConverter {
 
 
     public static List<KeySequenceElement> fromString(String s) {
-        List<HIDcode> e = s.chars().mapToObj(i -> lookupByChar((char) i)).flatMap(oh -> oh.stream().flatMap(Stream::of)).toList();
+        List<HIDcode> e = s.chars().mapToObj(i -> lookupByChar((char) i)).flatMap(Optional::stream).toList();
         KeyPress kp = new KeyPress();
         kp.elements.addAll(e);
         return Stream.of(kp).collect(Collectors.toList());

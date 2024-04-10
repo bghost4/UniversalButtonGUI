@@ -25,7 +25,7 @@ public class KeyPress extends KeySequenceElement {
                     e.addAll(fragment);
                     fragment = new ArrayList<>();
                 }
-                e.addAll(Modifier.setShift().toBytes().collect(Collectors.toList()));
+                e.addAll(Modifier.setShift().toBytes().toList());
                 shiftActive = true;
             } else if (shiftActive && !shiftRequired) {
                 if (fragment.size() > 0) {
@@ -34,7 +34,7 @@ public class KeyPress extends KeySequenceElement {
                     e.addAll(fragment);
                     fragment = new ArrayList<>();
                 }
-                e.addAll(Modifier.clrShift().toBytes().collect(Collectors.toList()));
+                e.addAll(Modifier.clrShift().toBytes().toList());
                 shiftActive = false;
             }
             fragment.add((byte) element.hid_code());
