@@ -45,7 +45,6 @@ public class KeyboardStringConverter {
         new HIDcode(0,"SysReq",false,0x9A),
         new HIDcode(0,"ScrLK",false,0x47),
         new HIDcode(0,"Pause",false,0x48),
-        //new SpecialKey("Break",true,0x48), Not sure if this is actually Implemented In HID Keycodes, as SysReq is its own key
         new HIDcode(0,"Ins",false,0x49),
         new HIDcode(0,"Home",false,0x4A),
         new HIDcode(0,"PgUp",false,0x4B),
@@ -60,6 +59,7 @@ public class KeyboardStringConverter {
 
     public static final HIDcode[] HIDCodeBlock = {
             //Punctuation & Num Keys
+            new HIDcode('\t',"\t",false,0x2B), //TAB
             new HIDcode(' '," ",false,0x2C), //Space
             new HIDcode('`',"`",false,0x35),
             new HIDcode('~',"~",true,0x35),
