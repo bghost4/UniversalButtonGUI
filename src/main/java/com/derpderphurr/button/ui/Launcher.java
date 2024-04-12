@@ -61,9 +61,9 @@ public class Launcher extends Application {
         btnReadFlash.disableProperty().bind(si.connectedProperty().not());
 
         btn.setOnAction(eh -> {
-            pushActions(elACW, SerialInterface.BufferLocation.ANTICLOCKWISE);
-            pushActions(elCW, SerialInterface.BufferLocation.CLOCKWISE);
-            pushActions(elPress, SerialInterface.BufferLocation.PRESS);
+            pushActions(elACW, SerialInterface.EventType.ANTICLOCKWISE);
+            pushActions(elCW, SerialInterface.EventType.CLOCKWISE);
+            pushActions(elPress, SerialInterface.EventType.PRESS);
         });
 
         btnStore.setOnAction(eh -> si.storeToFlash());
@@ -88,7 +88,7 @@ public class Launcher extends Application {
         primaryStage.show();
     }
 
-    public void pushActions(EventList el, SerialInterface.BufferLocation bl) {
+    public void pushActions(EventList el, SerialInterface.EventType bl) {
         List<? extends Action> a = el.getActions();
         List<Byte> stuff = a.stream().flatMap(Action::toBytes).toList();
         byte[] raw = new byte[stuff.size()+1];

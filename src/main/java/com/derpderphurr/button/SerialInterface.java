@@ -2,12 +2,17 @@ package com.derpderphurr.button;
 
 import com.fazecast.jSerialComm.SerialPort;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 import java.nio.ByteBuffer;
 import java.util.HexFormat;
+import java.util.function.Consumer;
 
 public class SerialInterface {
     private SerialPort serialPort;
+    public enum EventType { CLOCKWISE,ANTICLOCKWISE,PRESS }
+    private final SimpleObjectProperty<Consumer<EventType>> handler = new SimpleObjectProperty<>((e) -> {});
+    private final SimpleBooleanProperty connected = new SimpleBooleanProperty(false);
 
     public void storeToFlash() {
         serialPort.writeBytes("SS".getBytes(),2);
@@ -21,9 +26,28 @@ public class SerialInterface {
         System.out.println(HexFormat.of().formatHex(buffer));
     }
 
-    public enum BufferLocation { CLOCKWISE,ANTICLOCKWISE,PRESS }
+    public void setOnEventComplete(Consumer<EventType> eventTypeConsumer) {
+        handler.set(eventTypeConsumer);
+    }
 
-    private final SimpleBooleanProperty connected = new SimpleBooleanProperty(false);
+    public void checkForEvent() {
+        int bytesAvailable = serialPort.bytesAvailable();
+        if( bytesAvailable > 0) {
+            byte[] bytes = new byte[bytesAvailable];
+            serialPort.readBytes(bytes,bytesAvailable);
+            for(byte b : bytes) {
+                if(b == 'P') {
+                    handler.get().accept(EventType.PRESS);
+                } else if(b == 'C') {
+                    handler.get().accept(EventType.CLOCKWISE);
+                } else if(b == 'A') {
+                    handler.get().accept(EventType.ANTICLOCKWISE);
+                } else {
+                    //Unknown Byte
+                }
+            }
+        }
+    }
 
     public boolean isConnected() {
         return connected.get();
@@ -32,6 +56,8 @@ public class SerialInterface {
     public SimpleBooleanProperty connectedProperty() {
         return connected;
     }
+
+
 
     public void connect(SerialPort p) {
         this.serialPort = p;
@@ -77,7 +103,7 @@ public class SerialInterface {
 
 
 
-    public void putBuffer(BufferLocation loc,byte[] stuff) {
+    public void putBuffer(EventType loc, byte[] stuff) {
         ByteBuffer buf = ByteBuffer.allocate(3);
 
         switch(loc) {
@@ -112,7 +138,7 @@ public class SerialInterface {
         serialPort.readBytes(buf, size);
     }
 
-    public byte[] getAction(BufferLocation loc) {
+    public byte[] getAction(EventType loc) {
 
         int total_bytes = 0;
 
@@ -128,6 +154,9 @@ public class SerialInterface {
 
         //Maybe I should have it send the size back before the buffer this has to timeout
         int bytes = serialPort.readBytes(buffer, 64);
+
+        //TODO Decode these and put them in their respective slots
+
         //System.out.printf("Got %d bytes\n", bytes);
 
         return buffer;
@@ -135,22 +164,6 @@ public class SerialInterface {
 
     public int available() {
         return serialPort.bytesAvailable();
-    }
-
-    public byte[] getClockWiseAction() {
-        serialPort.writeBytes("GC".getBytes(),2);
-        byte[] buffer = new byte[64];
-        int bytes = serialPort.readBytes(buffer,64);
-        System.out.printf("Got %d bytes\n",bytes);
-        return buffer;
-    }
-
-    public byte[] getAntiClockWiseAction() {
-        serialPort.writeBytes("GA".getBytes(),2);
-        byte[] buffer = new byte[64];
-        int bytes = serialPort.readBytes(buffer,64);
-        System.out.printf("Got %d bytes\n",bytes);
-        return buffer;
     }
 
 }
