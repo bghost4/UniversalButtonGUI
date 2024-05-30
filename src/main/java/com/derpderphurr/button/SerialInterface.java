@@ -57,11 +57,8 @@ public class SerialInterface {
         return connected;
     }
 
-
-
     public void connect(SerialPort p) {
         this.serialPort = p;
-
         serialPort.openPort();
         serialPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING,5000,300);
         serialPort.setFlowControl(SerialPort.FLOW_CONTROL_CTS_ENABLED|SerialPort.FLOW_CONTROL_RTS_ENABLED|SerialPort.FLOW_CONTROL_DTR_ENABLED);

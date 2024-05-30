@@ -198,7 +198,7 @@ public class KeyboardStringConverter {
         return Stream.of(kp).collect(Collectors.toList());
     }
 
-    private static Optional<HIDcode> lookupByChar(Character character) {
+    public static Optional<HIDcode> lookupByChar(Character character) {
         return Arrays.stream(HIDCodeBlock).filter(c -> c.c== character).findFirst();
     }
 

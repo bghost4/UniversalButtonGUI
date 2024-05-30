@@ -21,6 +21,10 @@ public class ConsumerControl extends Action {
         this.description = description;
     }
 
+    public int getValue() {
+        return value;
+    }
+
     @Override
     public Stream<Byte> toBytes() {
         ByteBuffer bb = ByteBuffer.allocate(3);

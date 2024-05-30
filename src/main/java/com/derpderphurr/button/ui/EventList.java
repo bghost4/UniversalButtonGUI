@@ -26,12 +26,14 @@ public class EventList extends VBox {
         Button btnAddKeyboard = new Button("+Keyboard");
         Button btnAddMouse = new Button("+Mouse");
         Button btnAddConsumer = new Button("+Consumer");
-        hb.getChildren().addAll(btnMoveUp, btnAddKeyboard, btnAddConsumer, btnAddMouse, btnRemove, btnMoveDown);
+        Button btnAddToggle = new Button("Toggle");
+        hb.getChildren().addAll(btnMoveUp, btnAddKeyboard, btnAddToggle,btnAddConsumer, btnAddMouse, btnRemove, btnMoveDown);
         getChildren().add(hb);
 
         btnAddKeyboard.setOnAction(eh -> new KeyboardEditor().showAndWait().ifPresent(ka -> actions.getItems().add(ka)));
         btnAddConsumer.setOnAction(eh -> new ChoiceDialog<>(null,ConsumerControl.values).showAndWait().ifPresent(cc -> actions.getItems().add(cc)));
         btnAddMouse.setOnAction(eh -> new MouseEditor().showAndWait().ifPresent(ma -> actions.getItems().add(ma)));
+        btnAddToggle.setOnAction(eh -> new ToggleEditor().showAndWait().ifPresent(ma -> actions.getItems().add(ma)));
 
         actions.setCellFactory(view -> new ActionListCell());
 
